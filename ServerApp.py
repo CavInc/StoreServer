@@ -2,13 +2,13 @@ import json
 from flask import Flask,abort
 from flask import request,Response
 
-from api.workdirectory import getList
+from api.workdirectory import getList, makeDir
 
 app = Flask(__name__)
 
 BASE_DIR = app.root_path
 
-STORAGE_PATH = '/home/cav'
+STORAGE_PATH = '/home/cav/x/ServerTest'
 
 def resp(code,data):
    return Response(
@@ -32,9 +32,10 @@ def getListFiles():
     print (data)
     res['files'] = data
     print(json.dumps(res))
-    return resp(200, "{}")
+    return resp(200, json.dumps(res))
 
 # получить файл (параметр порный путь к файлу)
+@app.route("/api/getfile")
 def getFiles():
     pass
 
@@ -43,10 +44,17 @@ def setStoreFile():
     pass
 
 # создать каталог (полный путь,название)
+@app.route("/api/createdir",methods=['POST'])
 def createDir():
-    pass
+    if not request.json:
+        abort(400)
+    jbj = request.json
+    res = makeDir(STORAGE_PATH,jbj['path'],jbj['name'])
+    print (res)
+    return resp(200,"{}")
 
 # удалить файл/каталог (полный путь)
+@app.route("/api/deleteitem")
 def deleteFileOrDir():
     pass
 
