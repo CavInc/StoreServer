@@ -2,7 +2,7 @@ import json
 from flask import Flask,abort
 from flask import request,Response
 
-from api.workdirectory import getList, makeDir
+from api.workdirectory import getList, makeDir, deleteFileOrDirectory
 
 app = Flask(__name__)
 
@@ -51,12 +51,16 @@ def createDir():
     jbj = request.json
     res = makeDir(STORAGE_PATH,jbj['path'],jbj['name'])
     print (res)
-    return resp(200,"{}")
+    return resp(200,json.dumps(res))
 
 # удалить файл/каталог (полный путь)
-@app.route("/api/deleteitem")
+@app.route("/api/deleteitem",methods=['POST'])
 def deleteFileOrDir():
-    pass
+    if not request.json:
+        abort(400)
+    jbj = request.json
+    res = deleteFileOrDirectory(STORAGE_PATH,jbj['name'])
+    return resp(200, json.dumps(res))
 
 
 if __name__ == '__main__':
