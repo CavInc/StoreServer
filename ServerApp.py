@@ -1,5 +1,7 @@
 import json
-from flask import Flask,abort
+
+import os
+from flask import Flask, abort, send_from_directory
 from flask import request,Response
 
 from api.workdirectory import getList, makeDir, deleteFileOrDirectory
@@ -7,6 +9,8 @@ from api.workdirectory import getList, makeDir, deleteFileOrDirectory
 app = Flask(__name__)
 
 BASE_DIR = app.root_path
+
+app.secret_key = b'\x9b\x18n\xa5_\xe3\xcc\xa7Wx\xb2\xfa\xeb\x83~?\xaa\x8f\x10A\xf5+#\x85'
 
 STORAGE_PATH = '/home/cav/x/ServerTest'
 
@@ -20,7 +24,7 @@ def resp(code,data):
 
 # получить список файлов и каталогов (в качестве параметра корень или каталог родитель)
 # в json передаем путь
-@app.route('/',methods=['POST'])
+@app.route('/api/getfiles',methods=['POST'])
 def getListFiles():
     res = {};
     print (request.headers)
@@ -35,11 +39,25 @@ def getListFiles():
     return resp(200, json.dumps(res))
 
 # получить файл (параметр порный путь к файлу)
-@app.route("/api/getfile")
-def getFiles():
+@app.route("/api/getfile/<filename>")
+def getFiles(filename):
+    print (request.cookies)
+    #print imgid
+    if (filename is None):
+        abort(404)
+
+    print (filename)
+    #uploads = os.path.join(STORAGE_PATH, app.config['IMG_FOLDER'])
+    uploads = STORAGE_PATH
+    try:
+        return send_from_directory(directory=uploads, filename=filename)
+    except Exception as e:
+        print (e)
+        abort(404)
     pass
 
 # сохранить файл (полный путь,название файла)
+@app.route("/api/sendfile",methods=['POST'])
 def setStoreFile():
     pass
 
@@ -59,6 +77,7 @@ def deleteFileOrDir():
     if not request.json:
         abort(400)
     jbj = request.json
+    print (jbj)
     res = deleteFileOrDirectory(STORAGE_PATH,jbj['name'])
     return resp(200, json.dumps(res))
 
