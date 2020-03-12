@@ -14,6 +14,8 @@ app.secret_key = b'\x9b\x18n\xa5_\xe3\xcc\xa7Wx\xb2\xfa\xeb\x83~?\xaa\x8f\x10A\x
 
 STORAGE_PATH = '/home/cav/x/ServerTest'
 
+app.config['UPLOAD_FOLDER'] = STORAGE_PATH
+
 def resp(code,data):
    return Response(
      status=code,

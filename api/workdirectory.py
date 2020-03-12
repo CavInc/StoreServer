@@ -57,7 +57,7 @@ def deleteFileOrDirectory(base_path,name):
 def storeFile(data,files=None,uploadPath=None):
     print (files)
     if files !=None:
-        file = files['fname']
+        file = files['file']
         filename = secure_filename(file.filename)
         file.save(os.path.join(uploadPath,filename))
         pass
