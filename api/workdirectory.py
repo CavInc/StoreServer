@@ -1,5 +1,5 @@
 import os
-
+from werkzeug.utils import secure_filename
 
 def getList(base_path,path):
     out_data = []
@@ -53,3 +53,12 @@ def deleteFileOrDirectory(base_path,name):
         pass
     out_data['status'] = True
     return out_data
+
+def storeFile(data,files=None,uploadPath=None):
+    print (files)
+    if files !=None:
+        file = files['fname']
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(uploadPath,filename))
+        pass
+    pass

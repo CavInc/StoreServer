@@ -4,7 +4,7 @@ import os
 from flask import Flask, abort, send_from_directory
 from flask import request,Response
 
-from api.workdirectory import getList, makeDir, deleteFileOrDirectory
+from api.workdirectory import getList, makeDir, deleteFileOrDirectory, storeFile
 
 app = Flask(__name__)
 
@@ -59,7 +59,11 @@ def getFiles(filename):
 # сохранить файл (полный путь,название файла)
 @app.route("/api/sendfile",methods=['POST'])
 def setStoreFile():
-    pass
+    print (request.form)
+    print (request.files)
+
+    storeFile(request.form,request.files,STORAGE_PATH)
+    return resp(200, "{}")
 
 # создать каталог (полный путь,название)
 @app.route("/api/createdir",methods=['POST'])
