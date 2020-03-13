@@ -1,4 +1,4 @@
 #!/usr/bin/python3
 import sys
 sys.path.insert (0,'')
-from ServerApp import ap as application
+from ServerApp import app as application
