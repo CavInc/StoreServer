@@ -43,15 +43,15 @@ def makeDir(base_path,path,name):
 
 def deleteFileOrDirectory(base_path,name):
     out_data = {}
-    del_rem = base_path + os.sep + name
+    del_rem = base_path + name
     try:
         if os.path.isfile(del_rem):
             os.remove(del_rem)
         else :
-            os.removedirs(del_rem)
+            os.rmdir(del_rem)
     except Exception as e:
         out_data['status'] = False
-        out_data['msg'] = e
+        out_data['msg'] = str(e)
         pass
     out_data['status'] = True
     return out_data
