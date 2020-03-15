@@ -4,7 +4,7 @@ import os
 from flask import Flask, abort, send_from_directory
 from flask import request,Response
 
-from api.workdirectory import getList, makeDir, deleteFileOrDirectory, storeFile
+from api.workdirectory import getList, makeDir, deleteFileOrDirectory, storeFile, moveFile
 
 app = Flask(__name__)
 
@@ -83,10 +83,18 @@ def deleteFileOrDir():
     if not request.json:
         abort(400)
     jbj = request.json
-    print (jbj)
+    #print (jbj)
     res = deleteFileOrDirectory(STORAGE_PATH,jbj['name'])
     return resp(200, json.dumps(res))
 
+# перемещаем файл
+@app.route("/api/move",methods=['POST'])
+def modeFileOrDir():
+    if not request.json:
+        abort(400)
+    jbj = request.json
+    res = moveFile(STORAGE_PATH,jbj['src'],jbj['dest'])
+    return resp(200, json.dumps(res))
 
 if __name__ == '__main__':
     app.debug = True

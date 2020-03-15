@@ -1,4 +1,6 @@
 import os
+
+import shutil
 from werkzeug.utils import secure_filename
 
 def getList(base_path,path):
@@ -62,3 +64,10 @@ def storeFile(data,files=None,uploadPath=None):
         file.save(os.path.join(uploadPath,filename))
         pass
     pass
+
+def moveFile(base_path,src,dest):
+    out_data = {}
+
+    res = shutil.move(base_path+os.sep+src,base_path+os.sep+dest)
+
+    return out_data
